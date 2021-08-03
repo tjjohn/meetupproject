@@ -17,7 +17,7 @@ kafka_bootstrap_servers = 'localhost:9092'
 if __name__ == "__main__":
     print("Stream Data Processing Application Started ...")
     print(time.strftime("%Y-%m-%d %H:%M:%S"))
-
+    # sessiom for specfic users
     spark = SparkSession \
         .builder \
         .appName("PySpark Structured Streaming with Kafka and Message Format as JSON") \
@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
     spark.sparkContext.setLogLevel("ERROR")
 
-    # Construct a streaming DataFrame that reads from topic
+    # Construct a streaming DataFrame that reads from topic ie input
     df = spark \
         .readStream \
         .format("kafka") \
@@ -38,13 +38,13 @@ if __name__ == "__main__":
         .option("subscribe", kafka_topic_name) \
         .option("startingOffsets", "latest") \
         .load()
+            # starting offset means latest messages
+
+    df.printSchema()  # consists of key, value,offset,topic           and  value is the actual message
 
 
-    df.printSchema()  # consists of key, value,offset,topic  and  value is the actual message
 
-
-
-    #transforming
+    #transforming ie spark engine
 
     df1 = df.selectExpr("CAST(key AS STRING)", "CAST(value AS string)")
 
@@ -74,7 +74,7 @@ if __name__ == "__main__":
         .format("console") \
         .start()
     # Note that you have to call start() to actually start the execution of the query
-
+    #mongodb
     stream1.awaitTermination()
 
     print("Stream Data Processing Application Completed.")
