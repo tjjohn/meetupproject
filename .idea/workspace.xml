@@ -9,6 +9,9 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="ProjectId" id="1vPQLb0zuPrOiBHHACyDIpYwEB9" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Capstone projct/Deployment" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
