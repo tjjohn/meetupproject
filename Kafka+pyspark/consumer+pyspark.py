@@ -75,6 +75,7 @@ if __name__ == "__main__":
         .start()
     # Note that you have to call start() to actually start the execution of the query
     #mongodb
+    #streaming
     stream1.awaitTermination()
 
     print("Stream Data Processing Application Completed.")
