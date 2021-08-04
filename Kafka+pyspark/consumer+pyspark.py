@@ -8,16 +8,16 @@ import time
 
 
 
-kafka_topic_name = "wiki-changes"
+
+kafka_topic_name = "meetuprsvptopic"
 kafka_bootstrap_servers = 'localhost:9092'
 
 
 
 
 if __name__ == "__main__":
-    print("Stream Data Processing Application Started ...")
-    print(time.strftime("%Y-%m-%d %H:%M:%S"))
-    # sessiom for specfic users
+    print(" Data Processing  Started ...")
+    # session for specfic users
     spark = SparkSession \
         .builder \
         .appName("PySpark Structured Streaming with Kafka and Message Format as JSON") \
@@ -38,35 +38,60 @@ if __name__ == "__main__":
         .option("subscribe", kafka_topic_name) \
         .option("startingOffsets", "latest") \
         .load()
-            # starting offset means latest messages
-
-    df.printSchema()  # consists of key, value,offset,topic           and  value is the actual message
-
-
-
-    #transforming ie spark engine
-
-    df1 = df.selectExpr("CAST(key AS STRING)", "CAST(value AS string)")
-
-
-
-    new_schema = StructType([
-        StructField("venue", StringType()),
-        StructField("visibility", StringType())
+    # starting offset -> latest messages
+    #got the dstream
+    print("schema of dstream")
+    df.printSchema()  # schema of dataframe consists of key, value,offset,topic  where  value is the actual message
+    # defineing a schema based on json we about get
+    schema = StructType([
+        StructField("rsvp_id", IntegerType()),
+        StructField("mtime", IntegerType()),
+        StructField("guests", IntegerType())
     ])
 
 
-    df2 = (df1
-           # Sets schema for event data
-           .withColumn("value", from_json("value", new_schema))
-           .withColumn("key", from_json("key", new_schema))
-           )
+
+    #change datatype of dataframe
+    df1 = df.selectExpr( "CAST(value AS string)","CAST(timestamp AS TIMESTAMP)")
+    #changing column name of value and integrating with schema
+    df2 = df1.select(from_json(col("value"), schema).alias("new_value"))
+    print("\n schema of dataframe after taking VALUE from dstream")
+    df2.printSchema()
+
+    #getting all json message by columwise.....inner structure  not displayed..so if needed to split that column(important)
+    df3 = df2.select("new_value.*")
+
+    #flatten the json structure
+    df4 = df3.select(["rsvp_id", \
+    "mtime", \
+    "guests"])
 
 
+
+
+
+
+    #type is column
+    print("\ntype of  df['guests']",df4['guests'])
+
+    ######operations#######
+    #select
+    #df4 = df4.select("guests").where("guests > 1")
+
+    #filtering
+    #df4=df4.filter(df4["guests"]>0)
+
+
+    #groupby
+    #df4=df4.groupBy("rsvp_id").agg(fn.sum('guests').alias('total_guests'))
+    # df4=df4.groupBy("rsvp_id").count()
+
+    #temporary view and then apply SQL commands
+    df4.createOrReplaceTempView("Temptable")
+    df5=spark.sql("select * from Temptable")  ## returns another streaming DF
 
     #sinking
-
-    stream1=df2 \
+    stream1=df5 \
         .writeStream \
         .trigger(processingTime='5 seconds') \
         .outputMode("update") \
@@ -74,8 +99,8 @@ if __name__ == "__main__":
         .format("console") \
         .start()
     # Note that you have to call start() to actually start the execution of the query
-    #mongodb
-    #streaming------
+    # trigger interval set to 5 seconds(ie like batch interval in spark streaming)
+    # staging
     stream1.awaitTermination()
 
     print("Stream Data Processing Application Completed.")

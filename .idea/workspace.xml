@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="97729a83-7736-472d-be1d-9509e947ac0c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/1kafka_producer.py" beforeDir="false" afterPath="$PROJECT_DIR$/1kafka_producer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Kafka+pyspark/consumer+pyspark.py" beforeDir="false" afterPath="$PROJECT_DIR$/Kafka+pyspark/consumer+pyspark.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/New Text Document.txt" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -27,7 +29,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
