@@ -9,13 +9,13 @@ import json
 
 meetup_dot_com_rsvp_stream_api_url = "http://stream.meetup.com/2/rsvps"
 #meetup_dot_com_rsvp_stream_api_url = "https://stream.wikimedia.org/v2/stream/recentchange"
-kafka_topic_name = "wiki-changes"
+kafka_topic_name = "meetuprsvptopic"
 kafka_bootstrap_servers = 'localhost:9092'
 
 if __name__ == "__main__":
     print("Kafka Producer Application Started ... ")
 
-    kafka_producer_obj = KafkaProducer(bootstrap_servers=kafka_bootstrap_servers, value_serializer=lambda x: dumps(x).encode('utf-8'))  #dumps-into key value pair ie  json serelizer
+    kafka_producer_obj = KafkaProducer(bootstrap_servers=kafka_bootstrap_servers, value_serializer=lambda x: dumps(x).encode('utf-8'),api_version=(0, 10, 1))
 
     print("Printing before while loop start ... ")
     while True:  #infinite loop
